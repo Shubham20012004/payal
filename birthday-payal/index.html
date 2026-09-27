@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Payal 🎂</title>
+<meta name="description" content="A cinematic birthday surprise for Payal">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- canvas-confetti (lightweight, CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- =========================================================
+     LOADING SCREEN
+========================================================= -->
+<div id="loadingScreen" class="loading-screen" role="dialog" aria-label="Loading Payal's birthday surprise">
+  <div class="loading-particles" aria-hidden="true"></div>
+  <div class="loading-content">
+    <p class="loading-line loading-line--1">Something special is waiting for you&hellip;</p>
+    <p class="loading-line loading-line--2">Made with ❤️ for Payal</p>
+    <button id="openSurpriseBtn" class="btn btn--glow loading-btn" type="button">
+      Open Your Surprise <span aria-hidden="true">✨</span>
+    </button>
+  </div>
+</div>
+
+<!-- Music autoplay-blocked overlay -->
+<div id="musicPrompt" class="music-prompt hidden" role="dialog" aria-label="Start birthday music">
+  <div class="music-prompt__card">
+    <p>🎵 Start the Birthday Magic</p>
+    <button id="playMusicBtn" class="btn btn--glow" type="button">Play Music <span aria-hidden="true">✨</span></button>
+  </div>
+</div>
+
+<!-- Background music -->
+<audio id="birthdayMusic" preload="auto" loop>
+  <source src="audio/birthday.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Floating music toggle -->
+<button id="musicToggle" class="music-toggle" type="button" aria-label="Toggle background music" aria-pressed="false">
+  <span id="musicIcon" aria-hidden="true">🎵</span>
+</button>
+
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
+<header>
+  <nav id="mainNav" class="nav" aria-label="Section navigation">
+    <a href="#hero" class="nav__brand">Payal <span aria-hidden="true">✨</span></a>
+    <button id="navToggle" class="nav__toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navLinks" class="nav__links">
+      <li><a href="#hero" class="nav__link">Home</a></li>
+      <li><a href="#message" class="nav__link">Message</a></li>
+      <li><a href="#memories" class="nav__link">Memories</a></li>
+      <li><a href="#story" class="nav__link">Story</a></li>
+      <li><a href="#gift" class="nav__link">Surprise</a></li>
+      <li><a href="#letter" class="nav__link">Letter</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="siteMain">
+
+  <!-- =========================================================
+       1. HERO
+  ========================================================= -->
+  <section id="hero" class="hero">
+    <div class="hero__bg" aria-hidden="true">
+      <div class="hero__glow"></div>
+      <div class="hero__rays"></div>
+    </div>
+    <div class="floating-layer" id="heroHearts" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <h1 class="hero__title reveal-up">Happy Birthday, Payal <span aria-hidden="true">🎂</span></h1>
+      <p class="hero__subtitle reveal-up">To the most wonderful sister in the world <span aria-hidden="true">❤️</span></p>
+      <p class="hero__line hero__line--1 reveal-up">Today isn&rsquo;t just another day&hellip;</p>
+      <p class="hero__line hero__line--2 reveal-up">It&rsquo;s <em>YOUR</em> day. <span aria-hidden="true">✨</span></p>
+
+      <!-- Cake illustration -->
+      <div class="hero-cake" aria-hidden="true">
+        <div class="hero-cake__candle-row">
+          <span class="hero-cake__candle"><span class="hero-cake__flame"></span></span>
+          <span class="hero-cake__candle"><span class="hero-cake__flame"></span></span>
+          <span class="hero-cake__candle"><span class="hero-cake__flame"></span></span>
+        </div>
+        <div class="hero-cake__layer hero-cake__layer--top"></div>
+        <div class="hero-cake__layer hero-cake__layer--mid"></div>
+        <div class="hero-cake__layer hero-cake__layer--base"></div>
+        <div class="hero-cake__plate"></div>
+      </div>
+
+      <button class="btn btn--primary" id="startSurpriseBtn" type="button">Start the Surprise <span aria-hidden="true">🎁</span></button>
+    </div>
+    <div class="scroll-hint" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- =========================================================
+       2. COUNTDOWN
+  ========================================================= -->
+  <section id="countdown" class="countdown">
+    <h2 class="section-title reveal-up">Counting Down to Your Special Moment <span aria-hidden="true">⏳</span></h2>
+    <div id="countdownTimer" class="countdown__timer reveal-up" role="timer" aria-live="polite">
+      <div class="countdown__unit"><span id="cd-days" class="countdown__num">00</span><span class="countdown__label">Days</span></div>
+      <div class="countdown__unit"><span id="cd-hours" class="countdown__num">00</span><span class="countdown__label">Hours</span></div>
+      <div class="countdown__unit"><span id="cd-mins" class="countdown__num">00</span><span class="countdown__label">Minutes</span></div>
+      <div class="countdown__unit"><span id="cd-secs" class="countdown__num">00</span><span class="countdown__label">Seconds</span></div>
+    </div>
+    <p id="countdownDone" class="countdown__done hidden">🎉 IT&rsquo;S PAYAL&rsquo;S DAY! 🎉</p>
+  </section>
+
+  <!-- =========================================================
+       3. PERSONAL MESSAGE
+  ========================================================= -->
+  <section id="message" class="message">
+    <div class="glass-card message__card reveal-up">
+      <h2 class="section-title">Dear Payal <span aria-hidden="true">❤️</span></h2>
+      <div id="messageText" class="message__text">
+        <p>Happy Birthday to the person who has been more than just a sister — you&rsquo;ve been a friend, a partner in crime, someone I can annoy endlessly, and someone who somehow manages to make life a little brighter just by being around.</p>
+        <p>We&rsquo;ve had our arguments, our stupid fights, our laughter, our secrets, and countless little moments that I&rsquo;ll always remember.</p>
+        <p>No matter how much we grow up or how far life takes us, you&rsquo;ll always be my sister, and I&rsquo;ll always be there for you.</p>
+        <p>I hope this year brings you everything you&rsquo;ve been wishing for — happiness, success, peace, love, and countless reasons to smile.</p>
+        <p>Keep being the amazing person you are.</p>
+        <p class="message__emph">Happy Birthday, Payal. ❤️<br>You deserve the world.</p>
+      </div>
+      <p class="signature">— Your annoying but loving sibling ❤️</p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       4. WHY YOU'RE SPECIAL
+  ========================================================= -->
+  <section id="special" class="special">
+    <h2 class="section-title reveal-up">Why You&rsquo;re Special <span aria-hidden="true">💖</span></h2>
+    <div class="card-grid" id="specialGrid">
+      <article class="tilt-card reveal-up">
+        <span class="tilt-card__icon" aria-hidden="true">💖</span>
+        <h3>Kind Heart</h3>
+        <p>Your kindness has a way of making ordinary moments feel special.</p>
+      </article>
+      <article class="tilt-card reveal-up">
+        <span class="tilt-card__icon" aria-hidden="true">😂</span>
+        <h3>Professional Annoyer</h3>
+        <p>Nobody has mastered the art of annoying me quite like you. And somehow&hellip; I wouldn&rsquo;t have it any other way.</p>
+      </article>
+      <article class="tilt-card reveal-up">
+        <span class="tilt-card__icon" aria-hidden="true">🌟</span>
+        <h3>One of a Kind</h3>
+        <p>There is genuinely nobody else quite like you.</p>
+      </article>
+      <article class="tilt-card reveal-up">
+        <span class="tilt-card__icon" aria-hidden="true">🤝</span>
+        <h3>Always There</h3>
+        <p>Through the good days, bad days and complete chaos.</p>
+      </article>
+      <article class="tilt-card reveal-up">
+        <span class="tilt-card__icon" aria-hidden="true">✨</span>
+        <h3>Beautiful Soul</h3>
+        <p>Your personality makes the people around you happier.</p>
+      </article>
+      <article class="tilt-card reveal-up">
+        <span class="tilt-card__icon" aria-hidden="true">👑</span>
+        <h3>My Forever Sister</h3>
+        <p>No matter where life takes us, you&rsquo;ll always be my sister.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       5. MEMORY WALL
+  ========================================================= -->
+  <section id="memories" class="memories">
+    <h2 class="section-title reveal-up">Little Memories <span aria-hidden="true">📸</span></h2>
+    <p class="section-subtitle reveal-up">Some moments deserve to be remembered forever.</p>
+    <!-- Replace these images with Payal's actual photos -->
+    <div class="gallery" id="galleryGrid" role="list"></div>
+  </section>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <button class="lightbox__close" id="lightboxClose" type="button" aria-label="Close photo viewer">&times;</button>
+    <button class="lightbox__nav lightbox__prev" id="lightboxPrev" type="button" aria-label="Previous photo">&#10094;</button>
+    <figure class="lightbox__figure">
+      <img id="lightboxImg" src="" alt="">
+      <figcaption id="lightboxCaption"></figcaption>
+    </figure>
+    <button class="lightbox__nav lightbox__next" id="lightboxNext" type="button" aria-label="Next photo">&#10095;</button>
+  </div>
+
+  <!-- =========================================================
+       6. OUR LITTLE STORY
+  ========================================================= -->
+  <section id="story" class="story">
+    <h2 class="section-title reveal-up">Our Little Story <span aria-hidden="true">✨</span></h2>
+    <div class="timeline" id="timelineList"></div>
+  </section>
+
+  <!-- =========================================================
+       7. THINGS I WANT FOR YOU
+  ========================================================= -->
+  <section id="wishes" class="wishes">
+    <h2 class="section-title reveal-up">For You, Always <span aria-hidden="true">🌷</span></h2>
+    <div class="card-grid" id="wishesGrid">
+      <article class="wish-card reveal-up"><span class="wish-card__icon" aria-hidden="true">🌸</span><h3>Happiness</h3><p>May you always have reasons to smile.</p></article>
+      <article class="wish-card reveal-up"><span class="wish-card__icon" aria-hidden="true">✨</span><h3>Success</h3><p>May every dream you chase take you closer to where you want to be.</p></article>
+      <article class="wish-card reveal-up"><span class="wish-card__icon" aria-hidden="true">❤️</span><h3>Love</h3><p>May your life always be surrounded by people who genuinely love you.</p></article>
+      <article class="wish-card reveal-up"><span class="wish-card__icon" aria-hidden="true">🌎</span><h3>Adventures</h3><p>May you experience places, people and moments you&rsquo;ll never forget.</p></article>
+      <article class="wish-card reveal-up"><span class="wish-card__icon" aria-hidden="true">🕊️</span><h3>Peace</h3><p>May your heart always find peace, even on difficult days.</p></article>
+      <article class="wish-card reveal-up"><span class="wish-card__icon" aria-hidden="true">🎯</span><h3>Dreams</h3><p>May you never stop believing in what you&rsquo;re capable of.</p></article>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       8. INTERACTIVE GIFT
+  ========================================================= -->
+  <section id="gift" class="gift">
+    <h2 class="section-title reveal-up">There&rsquo;s Still One More Surprise&hellip; <span aria-hidden="true">🎁</span></h2>
+    <div class="gift-box" id="giftBox">
+      <div class="gift-box__glow" aria-hidden="true"></div>
+      <div class="gift-box__lid"></div>
+      <div class="gift-box__ribbon-v"></div>
+      <div class="gift-box__ribbon-h"></div>
+      <div class="gift-box__base"></div>
+      <div class="gift-box__bow"></div>
+    </div>
+    <button class="btn btn--primary" id="openGiftBtn" type="button">Open It</button>
+    <div id="giftMessage" class="gift-message hidden">
+      <p>Payal,</p>
+      <p>No matter how old we get,<br>you&rsquo;ll always be my little sister.</p>
+      <p>I&rsquo;ll always annoy you,<br>protect you,<br>support you,<br>and cheer for you.</p>
+      <p>Here&rsquo;s to another year of your beautiful journey.</p>
+      <p class="gift-message__final">Happy Birthday! ❤️🎂</p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       9. MAKE A WISH
+  ========================================================= -->
+  <section id="wish-cake" class="wish-cake">
+    <h2 class="section-title reveal-up">Make a Wish <span aria-hidden="true">🎂</span></h2>
+    <div class="cake" id="wishCake">
+      <div class="cake__candles" id="cakeCandles">
+        <span class="cake__candle"><span class="cake__flame"></span></span>
+        <span class="cake__candle"><span class="cake__flame"></span></span>
+        <span class="cake__candle"><span class="cake__flame"></span></span>
+        <span class="cake__candle"><span class="cake__flame"></span></span>
+        <span class="cake__candle"><span class="cake__flame"></span></span>
+      </div>
+      <div class="cake__tier cake__tier--top"></div>
+      <div class="cake__tier cake__tier--mid"></div>
+      <div class="cake__tier cake__tier--base"></div>
+      <div class="cake__stars" id="cakeStars" aria-hidden="true"></div>
+    </div>
+    <button class="btn btn--primary" id="blowCandlesBtn" type="button">Blow the Candles <span aria-hidden="true">🕯️</span></button>
+    <p id="wishResult" class="wish-result hidden">
+      <span>Wish made! ✨</span>
+      <span>May it come true, Payal. ❤️</span>
+    </p>
+  </section>
+
+  <!-- =========================================================
+       10. FINAL LETTER
+  ========================================================= -->
+  <section id="letter" class="letter-section">
+    <h2 class="section-title reveal-up">One Last Thing&hellip; <span aria-hidden="true">💌</span></h2>
+    <div class="envelope" id="envelope">
+      <div class="envelope__back"></div>
+      <div class="envelope__letter" id="envelopeLetter">
+        <p>Dear Payal,</p>
+        <p>Sometimes I probably don&rsquo;t say it enough, but having you as my sister is one of those things I&rsquo;ll always be grateful for.</p>
+        <p>Life changes.<br>We grow older.<br>We get busy.</p>
+        <p>But some bonds don&rsquo;t change.</p>
+        <p>No matter where life takes us, you&rsquo;ll always have a special place in my heart.</p>
+        <p>So today, I just want you to know:</p>
+        <p>I&rsquo;m proud of you.<br>I believe in you.<br>I&rsquo;m always cheering for you.</p>
+        <p>And yes&hellip; I&rsquo;ll continue annoying you forever. 😂❤️</p>
+        <p>Happy Birthday, Payal.<br>Stay happy. Stay crazy. Stay YOU.</p>
+        <p>Love always ❤️</p>
+        <p class="signature">Forever your sibling ❤️</p>
+      </div>
+      <div class="envelope__flap"></div>
+      <div class="envelope__front"></div>
+    </div>
+    <button class="btn btn--primary" id="openLetterBtn" type="button">Open Letter</button>
+  </section>
+
+  <!-- =========================================================
+       11. FINAL CELEBRATION
+  ========================================================= -->
+  <section id="finale" class="finale">
+    <div class="finale__sky" id="finaleSky" aria-hidden="true"></div>
+    <div class="finale__content">
+      <h2 class="finale__title reveal-up">Happy Birthday, Payal! <span aria-hidden="true">🎂❤️</span></h2>
+      <p class="finale__line reveal-up">May your life always be filled with<br>love, laughter, happiness &amp; beautiful memories.</p>
+      <p class="finale__line reveal-up">Here&rsquo;s to another amazing year! <span aria-hidden="true">🥂✨</span></p>
+      <p class="finale__signoff reveal-up">Made with ❤️ specially for Payal</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Made with ❤️ for Payal &mdash; happy birthday, always.</p>
+</footer>
+
+<!-- Back to top -->
+<button id="backToTop" class="back-to-top hidden" type="button" aria-label="Back to top">↑</button>
+
+<canvas id="confettiCanvas" class="confetti-canvas" aria-hidden="true"></canvas>
+
+<script src="script.js" defer></script>
+</body>
+</html>
